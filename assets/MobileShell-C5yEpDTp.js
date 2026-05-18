@@ -1,0 +1,1 @@
+import{j as e}from"./index-D6QuAHR_.js";function a({children:o,scrollRef:l}){return e.jsx("div",{className:"mx-auto flex h-dvh max-w-[430px] flex-col overflow-hidden bg-background shadow-xl sm:my-0",children:e.jsx("div",{ref:l,className:"relative flex-1 overflow-y-auto overscroll-contain",children:o})})}export{a as M};
