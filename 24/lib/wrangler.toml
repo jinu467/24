@@ -1,0 +1,7 @@
+name = "license-worker"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "LICENSE_DB"
+id = "afa29adbb34448068c1df98a6362a287"
