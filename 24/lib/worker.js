@@ -55,10 +55,17 @@ async function handleValidate(request, env) {
       return json({ valid: false, error: 'code and deviceId are required' }, 400);
     }
 
-    const record = await env.LICENSE_DB.get(code, { type: 'json' });
-
-    if (!record) {
+    const raw = await env.LICENSE_DB.get(code);
+    if (!raw) {
       return json({ valid: false, error: 'Invalid code' }, 200);
+    }
+
+    let record;
+    try {
+      record = JSON.parse(raw);
+    } catch {
+      // Legacy plain-string value (e.g. "unused")
+      record = { status: raw, deviceId: '', usedAt: '' };
     }
 
     if (record.status === 'unused') {
@@ -100,9 +107,15 @@ async function handleRegister(request, env) {
       return json({ error: 'code is required' }, 400);
     }
 
-    const existing = await env.LICENSE_DB.get(code, { type: 'json' });
-    if (existing) {
-      return json({ error: 'Code already exists' }, 409);
+    const raw = await env.LICENSE_DB.get(code);
+    if (raw) {
+      try {
+        JSON.parse(raw); // check if already a proper JSON object
+        return json({ error: 'Code already exists' }, 409);
+      } catch {
+        // legacy plain-string value — treat as already exists
+        return json({ error: 'Code already exists' }, 409);
+      }
     }
 
     await env.LICENSE_DB.put(code, JSON.stringify({
