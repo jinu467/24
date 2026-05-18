@@ -25,17 +25,18 @@
 </div>
 <script>
 (function() {
+  if (sessionStorage.getItem('loadingDone')) return;
+  sessionStorage.setItem('loadingDone', '1');
   var video = document.getElementById('loading-video');
   var screen = document.getElementById('loading-screen');
-  function hideAndRedirect() {
+  function hideScreen() {
     if (screen) screen.style.display = 'none';
-    window.location.href = '/';
   }
   if (video) {
-    video.addEventListener('ended', hideAndRedirect);
-    video.addEventListener('error', hideAndRedirect);
+    video.addEventListener('ended', hideScreen);
+    video.addEventListener('error', hideScreen);
   }
-  setTimeout(hideAndRedirect, 15000);
+  setTimeout(hideScreen, 15000);
 })();
 </script>
 </body></html>
